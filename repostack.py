@@ -111,7 +111,24 @@ class RepoStack(object):
         raise NotImplementedError('Not implemented yet.')
 
     def status(self, options):
-        """Give repos status"""
+        """
+        Usage: repostack [--dir=<path>] status [options] [<filepattern>]
+
+        Global options:
+            -d, --dir=<path>      set repostack root directory [default: .]
+
+        Command options:
+            -h, --help            show this message
+
+        This will show the status of all repos (or matched repos if
+        <filepattern> is specified):
+          - available tracked repos
+          - available untracked repos
+          - unavailable tracked repos
+
+        This will also mark available tracked repos that have diverged (their
+        remotes may have changed).
+        """
         raise NotImplementedError('Not implemented yet.')
 
     def diff(self, options):
