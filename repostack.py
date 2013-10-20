@@ -50,7 +50,20 @@ class RepoStack(object):
         raise NotImplementedError('Not implemented yet.')
 
     def add(self, options):
-        """Add repos to the stack of tracked repos"""
+        """
+        Usage: repostack [--dir=<path>] add [options] [<filepattern>]
+
+        Global options:
+            -d, --dir=<path>      set repostack root directory [default: .]
+
+        Command options:
+            -h, --help            show this message
+
+        This will add repos that match <filepattern> to the stack of tracked
+        repos (creates new sections in the ".repostack" file).
+        If <filepattern> is not specified, it will add all untracked git
+        repositories.
+        """
         raise NotImplementedError('Not implemented yet.')
 
     def rm(self, options):
