@@ -80,6 +80,7 @@ class RepoStack(object):
 
 def main():
     import sys
+    from textwrap import dedent
 
     from docopt import docopt
 
@@ -96,7 +97,8 @@ def main():
     try:
         repostack = RepoStack(rootdir=rootdir)
         if hasattr(repostack, command):
-            getattr(repostack, command)(args['<args>'])
+            cmd = getattr(repostack, command)
+            cmd(docopt(dedent(cmd.__doc__), argv=args['<args>']))
         else:
             sys.exit('\n'.join((
                 __doc__,
