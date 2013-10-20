@@ -162,7 +162,17 @@ class RepoStack(object):
         raise NotImplementedError('Not implemented yet.')
 
     def help(self, options):
-        """Give more information on a specific command"""
+        """
+
+        Usage: repostack [--dir=<path>] help [options] (init|add|rm|checkout|status|diff|do)
+        Global options:
+            -d, --dir=<path>      set repostack root directory [default: .]
+
+        Command options:
+            -h, --help            show this message
+
+        This will give more information on the specified <command>.
+        """
         raise NotImplementedError('Not implemented yet.')
 
 
