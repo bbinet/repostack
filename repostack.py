@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Usage: repostack [--version] [--help] [--dir=<path>] <command> [<args>]
+Usage: repostack [--version] [--help] [--dir=<path>] <command> [<options>]
 
 options:
     -v, --version
@@ -33,7 +33,7 @@ class RepoStack(object):
         self.rootdir = os.path.abspath(rootdir)
         self.cfg_path = os.path.join(self.rootdir, config)
 
-    def init(self, argv=[]):
+    def init(self, options):
         """
         Usage: repostack [--dir=<path>] init [options]
 
@@ -49,31 +49,31 @@ class RepoStack(object):
         """
         raise NotImplementedError('Not implemented yet.')
 
-    def add(self, argv=[]):
+    def add(self, options):
         """Add repos to the stack of tracked repos"""
         raise NotImplementedError('Not implemented yet.')
 
-    def rm(self, argv=[]):
+    def rm(self, options):
         """Remove repos from the stack of tracked repos"""
         raise NotImplementedError('Not implemented yet.')
 
-    def checkout(self, argv=[]):
+    def checkout(self, options):
         """Checkout repos"""
         raise NotImplementedError('Not implemented yet.')
 
-    def status(self, argv=[]):
+    def status(self, options):
         """Give repos status"""
         raise NotImplementedError('Not implemented yet.')
 
-    def diff(self, argv=[]):
+    def diff(self, options):
         """Show repos diff"""
         raise NotImplementedError('Not implemented yet.')
 
-    def do(self, argv=[]):
+    def do(self, options):
         """Run a command on repos"""
         raise NotImplementedError('Not implemented yet.')
 
-    def help(self, argv=[]):
+    def help(self, options):
         """Give more information on a specific command"""
         raise NotImplementedError('Not implemented yet.')
 
@@ -98,7 +98,7 @@ def main():
         repostack = RepoStack(rootdir=rootdir)
         if hasattr(repostack, command):
             cmd = getattr(repostack, command)
-            cmd(docopt(dedent(cmd.__doc__), argv=args['<args>']))
+            cmd(docopt(dedent(cmd.__doc__), argv=args['<options>']))
         else:
             sys.exit('\n'.join((
                 __doc__,
