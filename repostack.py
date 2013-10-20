@@ -5,7 +5,7 @@ Usage: repostack [--version] [--help] [--dir=<path>] <command> [<args>]
 
 options:
     -v, --version
-    -h, --help
+    -h, --help            show this message
     -d, --dir=<path>      set repostack root directory [default: .]
 
 The following commands are supported by repostack:
