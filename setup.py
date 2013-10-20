@@ -18,8 +18,9 @@ setup(
     entry_points={
         'console_scripts': ['repostack = repostack:main']
     },
-    long_description='\n\n'.join(
-        (open('README.rst').read(), repostack.__doc__)),
+    long_description='%s\n\n::\n\n%s' % (
+        open('README.rst').read(),
+        '\n'.join((4 * ' ') + l for l in repostack.__doc__.splitlines())),
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Topic :: Utilities',
