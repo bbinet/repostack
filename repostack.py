@@ -16,7 +16,6 @@ The following commands are supported by repostack:
     status     Give repos status
     diff       Show repos diff
     do         Run a command on repos
-    help       Give more information on a specific command
 
 See 'repostack help <command>' for more information on a specific command.
 """
@@ -161,20 +160,6 @@ class RepoStack(object):
         """
         raise NotImplementedError('Not implemented yet.')
 
-    def help(self, options):
-        """
-
-        Usage: repostack [--dir=<path>] help [options] (init|add|rm|checkout|status|diff|do)
-        Global options:
-            -d, --dir=<path>      set repostack root directory [default: .]
-
-        Command options:
-            -h, --help            show this message
-
-        This will give more information on the specified <command>.
-        """
-        raise NotImplementedError('Not implemented yet.')
-
 
 def main():
     import sys
@@ -192,6 +177,9 @@ def main():
     if args['--dir']:
         rootdir = args['--dir']
     command = args['<command>']
+    if command == 'help':
+        command = args['<options>']
+        args['<options>'] = '--help'
     try:
         repostack = RepoStack(rootdir=rootdir)
         if hasattr(repostack, command):
