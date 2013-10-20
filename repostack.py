@@ -147,7 +147,18 @@ class RepoStack(object):
         raise NotImplementedError('Not implemented yet.')
 
     def do(self, options):
-        """Run a command on repos"""
+        """
+        Usage: repostack [--dir=<path>] do [options] <command> [--] [<filepattern>]
+
+        Global options:
+            -d, --dir=<path>      set repostack root directory [default: .]
+
+        Command options:
+            -h, --help            show this message
+
+        This will run a command in all available tracked repos (or in matched
+        repos if <filepattern> is specified).
+        """
         raise NotImplementedError('Not implemented yet.')
 
     def help(self, options):
