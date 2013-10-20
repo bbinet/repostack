@@ -132,7 +132,18 @@ class RepoStack(object):
         raise NotImplementedError('Not implemented yet.')
 
     def diff(self, options):
-        """Show repos diff"""
+        """
+        Usage: repostack [--dir=<path>] diff [options] [<filepattern>]
+
+        Global options:
+            -d, --dir=<path>      set repostack root directory [default: .]
+
+        Command options:
+            -h, --help            show this message
+
+        This will show the diff for all available tracked repos which remotes
+        have diverged (or for matched repos if <filepattern> is specified).
+        """
         raise NotImplementedError('Not implemented yet.')
 
     def do(self, options):
