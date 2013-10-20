@@ -84,7 +84,23 @@ class RepoStack(object):
         raise NotImplementedError('Not implemented yet.')
 
     def checkout(self, options):
-        """Checkout repos"""
+        """
+        Usage: repostack [--dir=<path>] checkout [options] <filepattern>
+
+        Global options:
+            -d, --dir=<path>      set repostack root directory [default: .]
+
+        Command options:
+            -h, --help            show this message
+            -f, --force           force rewrite remote urls
+
+        If repos that match <filepattern> are not available yet, it will clone
+        the repos and set all remotes.
+        If they are already available, it will only set any new remotes, and
+        inform the user if existing remotes conflict with the tracked ones.
+        If user wants to override these conflicting remotes, the --force flag
+        should be set.
+        """
         raise NotImplementedError('Not implemented yet.')
 
     def status(self, options):
