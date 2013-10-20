@@ -58,11 +58,18 @@ class RepoStack(object):
 
         Command options:
             -h, --help            show this message
+            -f, --force           force rewrite remote urls
 
         This will add repos that match <filepattern> to the stack of tracked
         repos (creates new sections in the ".repostack" file).
         If <filepattern> is not specified, it will add all untracked git
         repositories.
+
+        If the repos are already tracked, it will only add additional tracking
+        information about any new remotes, and inform the user if existing
+        remotes conflict with the tracked ones.
+        If the user wants to force update stackrepo config to match actual
+        repos remotes, the --force flag should be set.
         """
         raise NotImplementedError('Not implemented yet.')
 
