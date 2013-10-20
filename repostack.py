@@ -84,7 +84,7 @@ def main():
 
     from docopt import docopt
 
-    args = docopt(__doc__, version=__version__)
+    args = docopt(__doc__, version=__version__, options_first=True)
 
     if args['--help']:
         print __doc__
