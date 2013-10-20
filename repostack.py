@@ -34,7 +34,19 @@ class RepoStack(object):
         self.cfg_path = os.path.join(self.rootdir, config)
 
     def init(self, argv=[]):
-        """Initialize a new repostack directory"""
+        """
+        Usage: repostack [--dir=<path>] init [options]
+
+        Global options:
+            -d, --dir=<path>      set repostack root directory [default: .]
+
+        Command options:
+            -h, --help            show this message
+
+        This will initialize repostack in the specified --dir directory or
+        the current directory by default.
+        It simply creates a new ".repostack" empty file.
+        """
         raise NotImplementedError('Not implemented yet.')
 
     def add(self, argv=[]):
