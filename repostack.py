@@ -67,7 +67,20 @@ class RepoStack(object):
         raise NotImplementedError('Not implemented yet.')
 
     def rm(self, options):
-        """Remove repos from the stack of tracked repos"""
+        """
+        Usage: repostack [--dir=<path>] rm [options] <filepattern>
+
+        Global options:
+            -d, --dir=<path>      set repostack root directory [default: .]
+
+        Command options:
+            -h, --help            show this message
+            -k, --keep            do not remove repo from disk
+
+        This will remove repos that match <filepattern> from the stack of
+        tracked repos (removes sections from the ".repostack" file).
+        The repos will also be removed from disk unless option --keep is set.
+        """
         raise NotImplementedError('Not implemented yet.')
 
     def checkout(self, options):
