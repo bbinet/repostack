@@ -33,7 +33,7 @@ class RepoStack(object):
         self.cfg_filename = config
         self.cfg_abspath = os.path.join(self.rootdir, config)
 
-    def init(self, options):
+    def init(self, args):
         """
         Usage: repostack [--dir=<path>] init [-h]
 
@@ -62,7 +62,7 @@ class RepoStack(object):
         open(self.cfg_abspath, 'w').close()
         print 'Directory "%s" is now managed by repostack.' % self.rootdir
 
-    def add(self, options):
+    def add(self, args):
         """
         Usage: repostack [--dir=<path>] add [-hf] [<filepattern>...]
 
@@ -86,7 +86,7 @@ class RepoStack(object):
         """
         raise NotImplementedError('Not implemented yet.')
 
-    def rm(self, options):
+    def rm(self, args):
         """
         Usage: repostack [--dir=<path>] rm [-hk] <filepattern>...
 
@@ -103,7 +103,7 @@ class RepoStack(object):
         """
         raise NotImplementedError('Not implemented yet.')
 
-    def checkout(self, options):
+    def checkout(self, args):
         """
         Usage: repostack [--dir=<path>] checkout [-hf] <filepattern>...
 
@@ -123,7 +123,7 @@ class RepoStack(object):
         """
         raise NotImplementedError('Not implemented yet.')
 
-    def status(self, options):
+    def status(self, args):
         """
         Usage: repostack [--dir=<path>] status [-h] [<filepattern>...]
 
@@ -144,7 +144,7 @@ class RepoStack(object):
         """
         raise NotImplementedError('Not implemented yet.')
 
-    def diff(self, options):
+    def diff(self, args):
         """
         Usage: repostack [--dir=<path>] diff [-h] [<filepattern>...]
 
@@ -159,7 +159,7 @@ class RepoStack(object):
         """
         raise NotImplementedError('Not implemented yet.')
 
-    def do(self, options):
+    def do(self, args):
         """
         Usage: repostack [--dir=<path>] do [-h] <command> [--] [<filepattern>...]
 
