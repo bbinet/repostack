@@ -169,17 +169,15 @@ def main():
 
     args = docopt(__doc__, version=__version__, options_first=True)
 
-    if args['--help']:
-        print __doc__
-        return
-
     rootdir = '.'
     if args['--dir']:
         rootdir = args['--dir']
+
     command = args['<command>']
     if command == 'help':
         command = args['<options>']
         args['<options>'] = '--help'
+
     try:
         repostack = RepoStack(rootdir=rootdir)
         if hasattr(repostack, command):
