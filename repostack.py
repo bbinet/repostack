@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Usage: repostack [--version] [--help] [--dir=<path>] <command> [<options>]
+Usage: repostack [--version] [--help] [--dir=<path>] <command> [<options>...]
 
 options:
     -v, --version
@@ -50,7 +50,7 @@ class RepoStack(object):
 
     def add(self, options):
         """
-        Usage: repostack [--dir=<path>] add [options] [<filepattern>]
+        Usage: repostack [--dir=<path>] add [options] [<filepattern>...]
 
         Global options:
             -d, --dir=<path>      set repostack root directory [default: .]
@@ -74,7 +74,7 @@ class RepoStack(object):
 
     def rm(self, options):
         """
-        Usage: repostack [--dir=<path>] rm [options] <filepattern>
+        Usage: repostack [--dir=<path>] rm [options] <filepattern>...
 
         Global options:
             -d, --dir=<path>      set repostack root directory [default: .]
@@ -91,7 +91,7 @@ class RepoStack(object):
 
     def checkout(self, options):
         """
-        Usage: repostack [--dir=<path>] checkout [options] <filepattern>
+        Usage: repostack [--dir=<path>] checkout [options] <filepattern>...
 
         Global options:
             -d, --dir=<path>      set repostack root directory [default: .]
@@ -111,7 +111,7 @@ class RepoStack(object):
 
     def status(self, options):
         """
-        Usage: repostack [--dir=<path>] status [options] [<filepattern>]
+        Usage: repostack [--dir=<path>] status [options] [<filepattern>...]
 
         Global options:
             -d, --dir=<path>      set repostack root directory [default: .]
@@ -132,7 +132,7 @@ class RepoStack(object):
 
     def diff(self, options):
         """
-        Usage: repostack [--dir=<path>] diff [options] [<filepattern>]
+        Usage: repostack [--dir=<path>] diff [options] [<filepattern>...]
 
         Global options:
             -d, --dir=<path>      set repostack root directory [default: .]
@@ -147,7 +147,7 @@ class RepoStack(object):
 
     def do(self, options):
         """
-        Usage: repostack [--dir=<path>] do [options] <command> [--] [<filepattern>]
+        Usage: repostack [--dir=<path>] do [options] <command> [--] [<filepattern>...]
 
         Global options:
             -d, --dir=<path>      set repostack root directory [default: .]
