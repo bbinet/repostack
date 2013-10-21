@@ -182,7 +182,7 @@ def main():
         repostack = RepoStack(rootdir=rootdir)
         if hasattr(repostack, command):
             cmd = getattr(repostack, command)
-            cmd(docopt(dedent(cmd.__doc__), argv=args['<options>']))
+            cmd(docopt(dedent(cmd.__doc__), argv=[command] + args['<options>']))
         else:
             sys.exit('\n'.join((
                 __doc__,
