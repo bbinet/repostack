@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Usage: repostack [--version] [--help] [--dir=<path>] <command> [<options>...]
+Usage: repostack [--version] [--help] [--dir=<path>] <command> [<args>...]
 
 options:
     -v, --version
@@ -175,14 +175,14 @@ def main():
 
     command = args['<command>']
     if command == 'help':
-        command = args['<options>']
-        args['<options>'] = '--help'
+        command = args['<args>']
+        args['<args>'] = '--help'
 
     try:
         repostack = RepoStack(rootdir=rootdir)
         if hasattr(repostack, command):
             cmd = getattr(repostack, command)
-            cmd(docopt(dedent(cmd.__doc__), argv=[command] + args['<options>']))
+            cmd(docopt(dedent(cmd.__doc__), argv=[command] + args['<args>']))
         else:
             sys.exit('\n'.join((
                 __doc__,
