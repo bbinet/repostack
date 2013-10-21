@@ -30,7 +30,8 @@ class RepoStack(object):
 
     def __init__(self, rootdir='.', config='.repostack'):
         self.rootdir = os.path.abspath(rootdir)
-        self.cfg_path = os.path.join(self.rootdir, config)
+        self.cfg_filename = config
+        self.cfg_abspath = os.path.join(self.rootdir, config)
 
     def init(self, options):
         """
@@ -46,7 +47,20 @@ class RepoStack(object):
         the current directory by default.
         It simply creates a new ".repostack" empty file.
         """
-        raise NotImplementedError('Not implemented yet.')
+        if os.path.exists(self.cfg_abspath):
+            raise Exception('Repostack already manages this directory.'
+                            '\nFile "%s" already exists.' % self.cfg_abspath)
+        checkdir = self.rootdir
+        while checkdir != os.path.dirname(checkdir):
+            checkdir = os.path.dirname(checkdir)
+            checkpath = os.path.join(checkdir, self.cfg_filename)
+            if os.path.exists(checkpath):
+                raise Exception('Repostack already manages a parent directory.'
+                                '\nFile "%s" exists.' % checkpath)
+        if not os.path.exists(self.rootdir):
+            os.makedirs(self.rootdir)
+        open(self.cfg_abspath, 'w').close()
+        print 'Directory "%s" is now managed by repostack.' % self.rootdir
 
     def add(self, options):
         """
