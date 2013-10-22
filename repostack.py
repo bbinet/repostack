@@ -20,6 +20,7 @@ The following commands are supported by repostack:
 See 'repostack help <command>' for more information on a specific command.
 """
 import os
+from ConfigParser import RawConfigParser
 
 
 __all__ = ['RepoStack']
@@ -30,8 +31,17 @@ class RepoStack(object):
 
     def __init__(self, rootdir='.', config='.repostack'):
         self.rootdir = os.path.abspath(rootdir)
+        self.cfg = None
         self.cfg_filename = config
         self.cfg_abspath = os.path.join(self.rootdir, config)
+
+    def _read_config(self):
+        if not os.path.exists(self.cfg_abspath):
+            raise Exception('This directory is not manged by repostack.'
+                            '\nFile "%s" does not exists.' % self.cfg_abspath)
+        self.cfg = RawConfigParser()
+        with open(self.cfg_abspath, 'r') as f:
+            self.cfg.readfp(f, self.cfg_abspath)
 
     def init(self, args):
         """
