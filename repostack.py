@@ -20,6 +20,7 @@ The following commands are supported by repostack:
 See 'repostack help <command>' for more information on a specific command.
 """
 import os
+import fnmatch
 from ConfigParser import RawConfigParser
 
 
@@ -49,6 +50,29 @@ class RepoStack(object):
                             '\nFile "%s" does not exists.' % self.cfg_abspath)
         with open(self.cfg_abspath, 'w') as f:
             self.cfg.write(f)
+
+    def _find_all_repos(self, start):
+        repos = []
+        for name in os.listdir(start):
+            path = os.path.join(start, name)
+            if not os.path.isdir(path):
+                continue
+            if os.path.isdir(os.path.join(path, '.git')):
+                repos.append(os.path.relpath(path, self.rootdir))
+            else:
+                repos += self._find_all_repos(path)
+        return repos
+
+    def _find_repos(self, patterns):
+        all_repos = self._find_all_repos(self.rootdir)
+        if not patterns:
+            return all_repos
+        found = set()
+        if isinstance(patterns, basestring):
+            patterns = [patterns]
+        for p in patterns:
+            found.update(fnmatch.filter(all_repos, p))
+        return found
 
     def init(self, args):
         """
