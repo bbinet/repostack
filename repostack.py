@@ -43,6 +43,13 @@ class RepoStack(object):
         with open(self.cfg_abspath, 'r') as f:
             self.cfg.readfp(f, self.cfg_abspath)
 
+    def _write_config(self):
+        if not os.path.exists(self.cfg_abspath):
+            raise Exception('This directory is not manged by repostack.'
+                            '\nFile "%s" does not exists.' % self.cfg_abspath)
+        with open(self.cfg_abspath, 'w') as f:
+            self.cfg.write(f)
+
     def init(self, args):
         """
         Usage: repostack [--dir=<path>] init [-h]
