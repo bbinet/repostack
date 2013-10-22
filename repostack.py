@@ -23,6 +23,8 @@ import os
 import fnmatch
 from ConfigParser import RawConfigParser
 
+import git
+
 
 __all__ = ['RepoStack']
 __version__ = '0.1'
@@ -125,7 +127,22 @@ class RepoStack(object):
         If the user wants to force update stackrepo config to match actual
         repos remotes, the --force flag should be set.
         """
-        raise NotImplementedError('Not implemented yet.')
+        self._read_config()
+        for repo in self._find_repos(args['<filepattern>']):
+            remotes = git.Repo(os.path.join(self.rootdir, repo)).remotes
+            if not self.cfg.has_section(repo):
+                self.cfg.add_section(repo)
+            cfg_remotes = {
+                k[7:]: v
+                for k, v in self.cfg.items(repo) if k[:7] == 'remote_'}
+            for r in remotes:
+                if r.name in cfg_remotes and r.url != cfg_remotes[r.name] \
+                        and not args['--force']:
+                    print '%s: remote "%s" not updated, use --force to ' \
+                        'overwrite.' % (repo, r.name)
+                    continue
+                self.cfg.set(repo, 'remote_' + r.name, r.url)
+        self._write_config()
 
     def rm(self, args):
         """
