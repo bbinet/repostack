@@ -1,6 +1,10 @@
 ``repostack`` keeps track of your repos
 =======================================
 
+.. image:: https://travis-ci.org/bbinet/repostack.png?branch=master
+   :target: https://travis-ci.org/bbinet/repostack
+   :alt: Travis-ci: continuous integration status.
+
 :Author: Bruno Binet
 :Email: bruno.binet@gmail.com
 
