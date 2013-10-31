@@ -30,6 +30,17 @@ __all__ = ['RepoStack']
 __version__ = '0.1'
 
 
+def _filter_repos(repos, patterns):
+    if not patterns:
+        return repos
+    found = set()
+    if isinstance(patterns, basestring):
+        patterns = [patterns]
+    for p in patterns:
+        found.update(fnmatch.filter(repos, p))
+    return found
+
+
 class RepoStack(object):
 
     def __init__(self, rootdir='.', config='.repostack'):
@@ -64,17 +75,6 @@ class RepoStack(object):
             else:
                 repos += self._find_all_repos(path)
         return repos
-
-    def _find_repos(self, patterns):
-        all_repos = self._find_all_repos(self.rootdir)
-        if not patterns:
-            return all_repos
-        found = set()
-        if isinstance(patterns, basestring):
-            patterns = [patterns]
-        for p in patterns:
-            found.update(fnmatch.filter(all_repos, p))
-        return found
 
     def init(self, args):
         """
@@ -128,7 +128,8 @@ class RepoStack(object):
         repos remotes, the --force flag should be set.
         """
         self._read_config()
-        for repo in self._find_repos(args['<filepattern>']):
+        for repo in _filter_repos(
+                self._find_all_repos(self.rootdir), args['<filepattern>']):
             remotes = git.Repo(os.path.join(self.rootdir, repo)).remotes
             if not self.cfg.has_section(repo):
                 self.cfg.add_section(repo)
