@@ -23,7 +23,10 @@ import os
 import fnmatch
 from ConfigParser import RawConfigParser
 
-import git
+try:
+    import git
+except ImportError:
+    pass
 
 
 __all__ = ['RepoStack']
