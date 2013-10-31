@@ -2,6 +2,9 @@ import unittest
 import os
 import shutil
 import tempfile
+from ConfigParser import ConfigParser
+
+import git
 
 from repostack import RepoStack
 
@@ -15,6 +18,22 @@ class TestRepoStack(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.tmpdir)
+
+    def _create_repo(self, path, remotes):
+        self.assertFalse(os.path.exists(path))
+        grepo = git.Repo.init(path)
+        for remote, url in remotes.iteritems():
+            grepo.create_remote(remote, url)
+        self.assertTrue(os.path.isdir(path))
+        return grepo
+
+    def _read_config_as_dict(self, path=None):
+        if path is None:
+            path = self.cfgpath
+        cfg = ConfigParser()
+        with open(path, 'r') as f:
+            cfg.readfp(f, path)
+            return dict(cfg._sections)
 
     def test_init(self):
         self.assertEqual(self.cfgpath, self.rs.cfg_abspath)
