@@ -97,8 +97,51 @@ class TestRepoStack(unittest.TestCase):
                 'remote_test': 'git://foo/test.git',
             }})
 
+    def test_rm(self):
+        path = os.path.join(self.tmpdir, 'path/to/foo')
+
+        # ok absent repo
+        with open(self.cfgpath, 'w') as f:
+            f.write('\n'.join((
+                '[path/to/foo]',
+                'remote_origin = git://foo/repo.git',
+            )))
+        self.assertDictEqual(self._read_config_as_dict(), {
+            'path/to/foo': {'remote_origin': 'git://foo/repo.git'}})
+        self.rs.rm({'<filepattern>': '*'})
+        self.assertDictEqual(self._read_config_as_dict(), {})
+
+        # ok both removed
+        with open(self.cfgpath, 'w') as f:
+            f.write('\n'.join((
+                '[path/to/foo]',
+                'remote_origin = git://foo/repo.git',
+            )))
+        self.assertDictEqual(self._read_config_as_dict(), {
+            'path/to/foo': {'remote_origin': 'git://foo/repo.git'}})
+        self._create_repo('path/to/foo', {'origin': 'git://foo/repo.git'})
+        self.assertTrue(os.path.isdir(os.path.join(path, '.git')))
+        self.rs.rm({'<filepattern>': '*', '--keep': None})
+        self.assertDictEqual(self._read_config_as_dict(), {})
+        self.assertFalse(os.path.exists(os.path.join(path, '.git')))
+
+        # ok --keep
+        with open(self.cfgpath, 'w') as f:
+            f.write('\n'.join((
+                '[path/to/foo]',
+                'remote_origin = git://foo/repo.git',
+            )))
+        self.assertDictEqual(self._read_config_as_dict(), {
+            'path/to/foo': {'remote_origin': 'git://foo/repo.git'}})
+        self._create_repo('path/to/foo', {'origin': 'git://foo/repo.git'})
+        self.assertTrue(os.path.isdir(os.path.join(path, '.git')))
+        self.rs.rm({'<filepattern>': '*', '--keep': True})
+        self.assertDictEqual(self._read_config_as_dict(), {})
+        self.assertTrue(os.path.isdir(os.path.join(path, '.git')))
+
     def test_checkout(self):
         path = os.path.join(self.tmpdir, 'path/to/bar')
+        self.assertFalse(os.path.exists(os.path.join(path, '.git')))
 
         # ok new repo
         with open(self.cfgpath, 'w') as f:
