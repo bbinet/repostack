@@ -68,6 +68,35 @@ class TestRepoStack(unittest.TestCase):
         self.assertTrue(os.path.exists(child_tmpdir))
         self.assertTrue(os.path.exists(child_cfgpath))
 
+    def test_add(self):
+        open(self.cfgpath, 'w').close()
+        self.rs.add({'<filepattern>': None})
+        self.assertDictEqual(self._read_config_as_dict(), {})
+
+        # ok new repo
+        foo = self._create_repo('foo', {'origin': 'git://foo/remote/repo.git'})
+        self.rs.add({'<filepattern>': None})
+        self.assertDictEqual(self._read_config_as_dict(), {
+            'foo': {'remote_origin': 'git://foo/remote/repo.git'}})
+
+        # ok existing repo, partial update
+        foo.create_remote('test', 'git://foo/test.git')
+        foo.remotes.origin.config_writer.set('url', 'git://foo/repo.git')
+        self.rs.add({'<filepattern>': None, '--force': None})
+        self.assertDictEqual(self._read_config_as_dict(), {
+            'foo': {
+                'remote_origin': 'git://foo/remote/repo.git',
+                'remote_test': 'git://foo/test.git',
+            }})
+
+        # ok existing repo, full update with --force
+        self.rs.add({'<filepattern>': None, '--force': True})
+        self.assertDictEqual(self._read_config_as_dict(), {
+            'foo': {
+                'remote_origin': 'git://foo/repo.git',
+                'remote_test': 'git://foo/test.git',
+            }})
+
 
 if __name__ == '__main__':
     unittest.main()
