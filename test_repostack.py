@@ -97,6 +97,38 @@ class TestRepoStack(unittest.TestCase):
                 'remote_test': 'git://foo/test.git',
             }})
 
+    def test_checkout(self):
+        path = os.path.join(self.tmpdir, 'path/to/bar')
+
+        # ok new repo
+        with open(self.cfgpath, 'w') as f:
+            f.write('\n'.join((
+                '[path/to/bar]',
+                'remote_origin = git://bar/repo.git',
+            )))
+        self.rs.checkout({'<filepattern>': '*'})
+        self.assertTrue(os.path.isdir(os.path.join(path, '.git')))
+        grepo = git.Repo.init(path)
+        self.assertEqual(grepo.remotes.origin.url, 'git://bar/repo.git')
+
+        # ok existing repo, partial update
+        with open(self.cfgpath, 'w') as f:
+            f.write('\n'.join((
+                '[path/to/bar]',
+                'remote_origin = git://bar/remote/repo.git',
+                'remote_test = git://bar/test.git',
+            )))
+        self.rs.checkout({'<filepattern>': '*', '--force': None})
+        grepo = git.Repo.init(path)
+        self.assertEqual(grepo.remotes.origin.url, 'git://bar/repo.git')
+        self.assertEqual(grepo.remotes.test.url, 'git://bar/test.git')
+
+        # ok existing repo, full update with --force
+        self.rs.checkout({'<filepattern>': '*', '--force': True})
+        grepo = git.Repo.init(path)
+        self.assertEqual(grepo.remotes.origin.url, 'git://bar/remote/repo.git')
+        self.assertEqual(grepo.remotes.test.url, 'git://bar/test.git')
+
 
 if __name__ == '__main__':
     unittest.main()
