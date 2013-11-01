@@ -20,6 +20,7 @@ The following commands are supported by repostack:
 See 'repostack help <command>' for more information on a specific command.
 """
 import os
+import shutil
 import fnmatch
 from ConfigParser import RawConfigParser
 
@@ -163,7 +164,13 @@ class RepoStack(object):
         tracked repos (removes sections from the ".repostack" file).
         The repos will also be removed from disk unless option --keep is set.
         """
-        raise NotImplementedError('Not implemented yet.')
+        self._read_config()
+        for repo in _filter_repos(self.cfg.sections(), args['<filepattern>']):
+            repopath = os.path.join(self.rootdir, repo)
+            if os.path.exists(repopath) and not args['--keep']:
+                shutil.rmtree(repopath)
+            self.cfg.remove_section(repo)
+        self._write_config()
 
     def checkout(self, args):
         """
