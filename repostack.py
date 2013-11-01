@@ -183,7 +183,23 @@ class RepoStack(object):
         If user wants to override these conflicting remotes, the --force flag
         should be set.
         """
-        raise NotImplementedError('Not implemented yet.')
+        self._read_config()
+        for repo in _filter_repos(self.cfg.sections(), args['<filepattern>']):
+            grepo = git.Repo.init(os.path.join(self.rootdir, repo))
+            for k, v in self.cfg.items(repo):
+                if not k.startswith('remote_'):
+                    continue
+                remote = k[7:]
+                if not hasattr(grepo.remotes, remote):
+                    grepo.create_remote(remote, v)
+                    continue
+                gremote = getattr(grepo.remotes, remote)
+                if gremote.url != v and not args['--force']:
+                    print '%s: remote "%s" differs from git repo\'s remote, ' \
+                            'use --force to overwrite url "%s" with "%s".' % (
+                                    repo, remote, gremote.url, v)
+                    continue
+                gremote.config_writer.set('url', v)
 
     def status(self, args):
         """
