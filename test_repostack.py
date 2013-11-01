@@ -20,6 +20,7 @@ class TestRepoStack(unittest.TestCase):
         shutil.rmtree(self.tmpdir)
 
     def _create_repo(self, path, remotes):
+        path = os.path.join(self.tmpdir, path)
         self.assertFalse(os.path.exists(path))
         grepo = git.Repo.init(path)
         for remote, url in remotes.iteritems():
@@ -33,7 +34,11 @@ class TestRepoStack(unittest.TestCase):
         cfg = ConfigParser()
         with open(path, 'r') as f:
             cfg.readfp(f, path)
-            return dict(cfg._sections)
+            d = dict(cfg._sections)
+            for k in d:
+                d[k] = dict(cfg._defaults, **d[k])
+                d[k].pop('__name__', None)
+            return d
 
     def test_init(self):
         self.assertEqual(self.cfgpath, self.rs.cfg_abspath)
