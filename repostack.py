@@ -22,6 +22,9 @@ See 'repostack help <command>' for more information on a specific command.
 import os
 import shutil
 import fnmatch
+import traceback
+from multiprocessing import Pool
+from subprocess import check_output
 from ConfigParser import RawConfigParser
 
 try:
@@ -43,6 +46,15 @@ def _filter_repos(repos, patterns):
     for p in patterns:
         found.update(fnmatch.filter(repos, p))
     return found
+
+
+def _run(args):
+    path, cmd = args
+    try:
+        out = check_output(cmd, cwd=path)
+    except Exception:
+        out = traceback.format_exc()
+    return '[%s]\n%s' % (path, out)
 
 
 class RepoStack(object):
@@ -79,6 +91,11 @@ class RepoStack(object):
             else:
                 repos += self._find_all_repos(path)
         return repos
+
+    def _find_managed_repos(self):
+        for repo in self.cfg.sections():
+            if os.path.isdir(os.path.join(self.rootdir, repo, '.git')):
+                yield repo
 
     def init(self, args):
         """
@@ -246,7 +263,7 @@ class RepoStack(object):
 
     def do(self, args):
         """
-        Usage: repostack [--dir=<path>] do [-h] <command> [--] [<filepattern>...]
+        Usage: repostack [--dir=<path>] do [-h] <command>... [--] [<filepattern>...]
 
         Global options:
             -d, --dir=<path>      set repostack root directory [default: .]
@@ -257,7 +274,12 @@ class RepoStack(object):
         This will run a command in all available tracked repos (or in matched
         repos if <filepattern> is specified).
         """
-        raise NotImplementedError('Not implemented yet.')
+        self._read_config()
+        p = Pool(4)
+        for output in p.imap(_run, [
+            (p, args['<command>']) for p in _filter_repos(
+                self._find_managed_repos(), args['<filepattern>'])]):
+            print output
 
 
 def main():
@@ -281,7 +303,10 @@ def main():
         repostack = RepoStack(rootdir=rootdir)
         if hasattr(repostack, command):
             cmd = getattr(repostack, command)
-            cmd(docopt(dedent(cmd.__doc__), argv=[command] + args['<args>']))
+            cmd(docopt(
+                dedent(cmd.__doc__),
+                options_first=True,
+                argv=[command] + args['<args>']))
         else:
             sys.exit('\n'.join((
                 __doc__,
